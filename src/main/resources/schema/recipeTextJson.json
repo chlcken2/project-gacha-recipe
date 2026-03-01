@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "recipe": {
+      "type": "object",
+      "properties": {
+        "title":                { "type": "string" },
+        "summary":              { "type": "string" },
+        "difficulty":           { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH"] },
+        "estimatedTimeMinutes": { "type": "number" },
+        "ingredients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name":   { "type": "string" },
+              "amount": { "type": "number" },
+              "unit":   { "type": "string" }
+            },
+            "required": ["name", "amount", "unit"]
+          }
+        },
+        "calories": { "type": "number" },
+        "protein":  { "type": "number" },
+        "fat":      { "type": "number" },
+        "carbs":    { "type": "number" },
+        "nutrient": { "type": "string" },
+        "steps": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["title", "summary", "difficulty", "estimatedTimeMinutes", "ingredients", "steps"]
+    }
+  },
+  "required": ["recipe"]
+}

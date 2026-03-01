@@ -1,4 +1,10 @@
 package com.dailytable.dailytable.domain.gacha;
 
-public class GachaRepository {
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+@Mapper
+public interface GachaRepository {
+
+    int countTodayGenerations(@Param("userId") Long userId);
 }

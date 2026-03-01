@@ -73,6 +73,12 @@ application.properties.yml
 uploads/
 
 ############################################
+# AI Generated Images (runtime)
+############################################
+src/main/resources/static/images/*.png
+src/main/resources/static/images/*.jpg
+
+############################################
 # Test Reports
 ############################################
 /build/reports/

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dailytable.dailytable.domain.ingredient.IngredientRepository">
+
+    <select id="findNormalizedByAlias" resultType="String">
+        SELECT normalized_name FROM ingredient_aliases WHERE alias_name = #{aliasName} LIMIT 1
+    </select>
+
+    <insert id="insertAlias" parameterType="com.dailytable.dailytable.domain.ingredient.IngredientEntity$Alias">
+        INSERT IGNORE INTO ingredient_aliases (alias_name, normalized_name)
+        VALUES (#{aliasName}, #{normalizedName})
+    </insert>
+
+    <insert id="insertIngredient">
+        INSERT IGNORE INTO ingredients (normalized_name) VALUES (#{normalizedName})
+    </insert>
+
+    <select id="existsByNormalizedName" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM ingredients WHERE normalized_name = #{normalizedName}
+    </select>
+
+</mapper>

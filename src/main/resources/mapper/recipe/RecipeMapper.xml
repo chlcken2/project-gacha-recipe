@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dailytable.dailytable.domain.recipe.RecipeRepository">
+
+    <insert id="insertRecipe" parameterType="com.dailytable.dailytable.domain.recipe.RecipeEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO recipes (user_id, title, title_image, description, cooking_time,
+        difficulty_id, purpose_id, cuisine_id, is_ai_generated, is_public)
+        VALUES (#{userId}, #{title}, #{titleImage}, #{description}, #{cookingTime},
+        #{difficultyId}, #{purposeId}, #{cuisineId}, #{aiGenerated}, #{isPublic})
+    </insert>
+
+    <insert id="insertRecipeIngredient"
+            parameterType="com.dailytable.dailytable.domain.recipe.RecipeEntity$RecipeIngredient">
+        INSERT INTO recipe_ingredients (recipe_id, name, normalized_name, quantity, unit, is_ai_generated)
+        VALUES (#{recipeId}, #{name}, #{normalizedName}, #{quantity}, #{unit}, #{aiGenerated})
+    </insert>
+
+    <insert id="insertRecipeStep"
+            parameterType="com.dailytable.dailytable.domain.recipe.RecipeEntity$RecipeStep">
+        INSERT INTO recipe_steps (recipe_id, step_order, content)
+        VALUES (#{recipeId}, #{stepOrder}, #{content})
+    </insert>
+
+    <insert id="insertRecipeNutrient"
+            parameterType="com.dailytable.dailytable.domain.recipe.RecipeEntity$RecipeNutrient">
+        INSERT INTO recipe_nutrients (recipe_id, nutrient_name, amount, unit)
+        VALUES (#{recipeId}, #{nutrientName}, #{amount}, #{unit})
+    </insert>
+
+    <select id="findById" resultType="com.dailytable.dailytable.domain.recipe.RecipeEntity">
+        SELECT r.*,
+        d.name AS difficulty_name,
+        p.name AS purpose_name,
+        c.name AS cuisine_name,
+        u.nickname AS user_nickname
+        FROM recipes r
+        JOIN difficulties d ON r.difficulty_id = d.id
+        JOIN purposes p ON r.purpose_id = p.id
+        JOIN cuisines c ON r.cuisine_id = c.id
+        JOIN users u ON r.user_id = u.id
+        WHERE r.id = #{id}
+        AND r.deleted_at IS NULL
+    </select>
+
+    <select id="findIngredientsByRecipeId"
+            resultType="com.dailytable.dailytable.domain.recipe.RecipeEntity$RecipeIngredient">
+        SELECT * FROM recipe_ingredients WHERE recipe_id = #{recipeId}
+    </select>
+
+    <select id="findStepsByRecipeId"
+            resultType="com.dailytable.dailytable.domain.recipe.RecipeEntity$RecipeStep">
+        SELECT * FROM recipe_steps WHERE recipe_id = #{recipeId} ORDER BY step_order ASC
+    </select>
+
+    <select id="findNutrientsByRecipeId"
+            resultType="com.dailytable.dailytable.domain.recipe.RecipeEntity$RecipeNutrient">
+        SELECT * FROM recipe_nutrients WHERE recipe_id = #{recipeId}
+    </select>
+
+    <update id="updatePublicStatus">
+        UPDATE recipes SET is_public = #{isPublic} WHERE id = #{id}
+    </update>
+
+</mapper>
