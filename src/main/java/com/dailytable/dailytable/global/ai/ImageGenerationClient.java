@@ -115,11 +115,41 @@ public class ImageGenerationClient {
      * Fallback: Pollinations.ai URL-based generation (free, no API key needed)
      */
     private String generatePollinationsUrl(String title, String cuisineStyle) {
-        String shortTitle = title != null && title.length() > 20 ? title.substring(0, 20) : title;
-        String prompt = shortTitle + " " + cuisineStyle + " food dish";
+
+        String shortTitle = title != null && title.length() > 20
+                ? title.substring(0, 20)
+                : title;
+
+        String prompt = String.join(", ",
+                shortTitle,
+                cuisineStyle + " cuisine",
+                "restaurant plating",
+                "professional food photography",
+                "ultra realistic texture",
+                "natural soft daylight",
+                "50mm lens",
+                "shallow depth of field",
+                "close-up shot",
+                "high detail",
+                "steam visible",
+                "rich color contrast",
+                "no text",
+                "no watermark",
+                "no logo",
+                "no people",
+                "no hands",
+                "clean background"
+        );
+
         String encodedPrompt = URLEncoder.encode(prompt, StandardCharsets.UTF_8);
+
         String url = "https://image.pollinations.ai/prompt/" + encodedPrompt
-                + "?width=512&height=512&nologo=true&model=flux";
+                + "?width=768"
+                + "&height=768"
+                + "&nologo=true"
+                + "&model=flux"
+                + "&seed=42"; // 고정 seed로 재현성 확보
+
         return url.length() > 500 ? url.substring(0, 500) : url;
     }
 }

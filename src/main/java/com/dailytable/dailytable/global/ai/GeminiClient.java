@@ -79,21 +79,58 @@ public class GeminiClient {
 
     private String buildRecipePrompt(String ingredients, String sauces,
                                      String purpose, String cuisine, String difficulty) {
-        return "You are a professional chef. "
-                + "Using the following information, generate exactly one recipe. "
+        return "You are a creative professional chef specializing in 'Single-person Household Gourmet' (자취요리 전문가). "
+                + "Generate exactly one restaurant-quality recipe strictly for ONE serving (1 portion only). "
+                + "Do NOT scale for multiple servings. "
+
+                + "The recipe must be sophisticated yet practical for a student or single person. "
+                + "It must be achievable using only basic small-kitchen equipment "
+                + "(1 pan OR 1 pot, knife, microwave only). "
+                + "Do NOT use oven, air fryer, blender, or special appliances. "
+
+                + "The cuisine style must meaningfully influence ingredients, seasoning style, and overall concept. "
+                + "Do NOT ignore the cuisine style. "
+
+                + "The dish must feel balanced and layered in flavor, not one-dimensional. "
+                + "The unique twist must come from at least one of the following: "
+                + "a clear flavor contrast, texture contrast, or a simple chef technique "
+                + "(e.g., browning for depth, controlled caramelization, deglazing with a common drink, emulsifying sauce). "
+
+                + "Use ingredients commonly available in Korean supermarkets or convenience stores. "
+                + "Avoid rare, imported, specialty, or expensive ingredients. "
+                + "Avoid alcohol, luxury cheeses, and premium meats. "
+
+                + "Limit total seasoning/sauce ingredients to a maximum of 4 types. "
+
+                + "When adding ingredients in cooking steps, you MUST explicitly mention the exact amount and unit "
+                + "(e.g., 고추장 15g, 간장 5ml). "
+                + "Do NOT refer to ingredients without quantities. "
+                + "Do NOT group multiple sauces without specifying each individual amount. "
+
+                + "Each ingredient listed in the ingredients array must be used consistently in the steps. "
+                + "Do NOT introduce new ingredients that are not listed. "
+
+                + "Each cooking step must be clear, practical, and concise (1–3 sentences per step). "
+
+                + "The plating should look visually appealing even when served in a small bowl or plate. "
+
                 + "Ingredients: " + ingredients + " "
                 + "Sauces: " + (sauces != null && !sauces.isEmpty() ? sauces : "none") + " "
                 + "Purpose: " + purpose + " "
                 + "Cuisine style: " + cuisine + " "
                 + "Preferred difficulty: " + difficulty + " "
-                + "\n\nReturn ONLY valid JSON. Do not include explanations. "
-                + "Do not include markdown. Do not include backticks. "
-                + "Do not include additional text. "
+
+                + "\n\nReturn ONLY valid JSON. "
+                + "Do NOT include explanations. "
+                + "Do NOT include markdown. "
+                + "Do NOT include backticks. "
+                + "Do NOT include any extra text outside the JSON structure. "
+
                 + "\n\nThe JSON format must be exactly:\n"
                 + "{\n"
                 + "  \"recipe\": {\n"
                 + "    \"title\": \"string (Korean)\",\n"
-                + "    \"summary\": \"2 sentence summary in Korean\",\n"
+                + "    \"summary\": \"2 sentence summary in Korean clearly highlighting the twist and flavor profile\",\n"
                 + "    \"difficulty\": \"LOW | MEDIUM | HIGH\",\n"
                 + "    \"estimatedTimeMinutes\": number,\n"
                 + "    \"ingredients\": [\n"
@@ -107,10 +144,11 @@ public class GeminiClient {
                 + "    \"protein\": number,\n"
                 + "    \"fat\": number,\n"
                 + "    \"carbs\": number,\n"
-                + "    \"nutrient\": \"string (Korean, brief nutritional note)\",\n"
+                + "    \"nutrient\": \"string (Korean, short nutritional highlight)\",\n"
                 + "    \"steps\": [\n"
-                + "      \"string (Korean)\"\n"
-                + "    ]\n"
+                + "      \"string (Korean, must include exact ingredient amounts when used)\"\n"
+                + "    ],\n"
+                + "    \"chefTip\": \"string (Korean, 핵심 비법 한 줄 요약)\"\n"
                 + "  }\n"
                 + "}";
     }
