@@ -6,6 +6,58 @@
   <title>食事ガチャ - 一人暮らしレシピ</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" th:href="@{/css/recipe.css}"/>
+  <style>
+    /* ガチャマシン カプセルボール */
+    .gcball {
+      position: absolute;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      box-shadow: 4px 4px 10px rgba(0,0,0,0.4), inset -4px -4px 8px rgba(0,0,0,0.2), inset 4px 4px 8px rgba(255,255,255,0.6);
+    }
+    @keyframes gachaSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes domeGlow {
+      0%,100% { box-shadow: inset 0 0 10px rgba(56,189,248,0.1); }
+      50%      { box-shadow: inset 0 0 35px rgba(56,189,248,0.5); }
+    }
+    @keyframes capsuleReveal {
+      0%   { transform: scale(0) rotate(0deg) translateY(30px); opacity:0; }
+      50%  { transform: scale(1.5) rotate(360deg) translateY(-5px); opacity:1; }
+      75%  { transform: scale(0.9) rotate(680deg) translateY(0); }
+      100% { transform: scale(1.1) rotate(720deg) translateY(0); opacity:1; }
+    }
+    @keyframes arrowBounce {
+      from { transform: translateY(0); }
+      to   { transform: translateY(6px); }
+    }
+    @keyframes coinFall {
+      0%   { transform: translateY(-28px) scale(0.4) rotate(-45deg); opacity:0; }
+      35%  { transform: translateY(4px) scale(1.1) rotate(10deg); opacity:1; }
+      65%  { transform: translateY(0) scale(1) rotate(0deg); opacity:1; }
+      100% { transform: translateY(28px) scale(0.5) rotate(20deg); opacity:0; }
+    }
+    @keyframes starFloat {
+      0%   { transform: translate(0,0) scale(1) rotate(0deg); opacity:1; }
+      100% { transform: translate(var(--tx),var(--ty)) scale(0.1) rotate(360deg); opacity:0; }
+    }
+    @keyframes shakeX {
+      0%,100% { transform: translateX(0) rotate(0); }
+      20%     { transform: translateX(-7px) rotate(-1deg); }
+      40%     { transform: translateX(9px) rotate(1deg); }
+      60%     { transform: translateX(-5px) rotate(-0.5deg); }
+      80%     { transform: translateX(7px) rotate(0.5deg); }
+    }
+    @keyframes dialSpinAnim {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(720deg); }
+    }
+    @keyframes lcdPulse {
+      0%,90%,100% { opacity:1; }
+      95% { opacity:0.25; }
+    }
+  </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 pb-8">
   <header class="bg-gradient-to-r from-amber-700 to-amber-800 text-white sticky top-0 z-50 shadow-lg">
@@ -198,16 +250,79 @@
       <button type="button" onclick="document.getElementById('error-toast').classList.add('hidden')" class="mt-2 text-sm underline">閉じる</button>
     </div>
 
-    <!-- Rolling Animation -->
-    <div id="gacha-rolling" class="hidden mt-6 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-12 shadow-2xl">
-      <div class="flex flex-col items-center justify-center text-white">
-        <div class="text-6xl mb-4 animate-dice-wiggle">🍳</div>
-        <h3 class="text-3xl font-bold mb-2">シェフが料理中...</h3>
-        <p class="text-lg text-pink-100 mb-4">どんなレシピが出るかな？わくわく</p>
-        <div class="w-full bg-white/20 rounded-full h-3 max-w-xs">
-          <div id="progress-bar" class="bg-white rounded-full h-3 transition-all duration-500" style="width: 0%"></div>
+    <!-- ガチャマシンオーバーレイ (全画面) -->
+    <div id="gacha-overlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center overflow-hidden">
+      <!-- 背景ブラー -->
+      <div class="absolute inset-0 bg-black/20 backdrop-blur-md"></div>
+      <!-- パーティクルレイヤー -->
+      <div id="gacha-particles" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+      <!-- コンテンツ -->
+      <div class="relative z-10 flex flex-col items-center gap-4 px-4">
+        <!-- フェーズテキスト -->
+        <div id="gacha-phase-msg" class="text-white text-base sm:text-lg font-bold px-5 py-2 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 text-center">
+          🎰 マシン起動中...
         </div>
-        <p id="progress-text" class="text-sm text-pink-200 mt-2">AIが食材を分析しています...</p>
+        <!-- マシン本体 -->
+        <div id="gacha-machine-body" style="width:280px; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.8));">
+          <!-- ドーム -->
+          <div style="width:244px; height:192px; margin:0 auto; position:relative;">
+            <div id="gacha-dome" style="width:244px;height:192px;background:radial-gradient(ellipse at 35% 30%,rgba(255,255,255,0.95) 0%,rgba(173,216,255,0.75) 45%,rgba(56,189,248,0.55) 100%);border:6px solid #0284c7;border-bottom:none;border-radius:122px 122px 0 0;overflow:hidden;position:relative;box-shadow:inset -20px -15px 40px rgba(0,80,180,0.2),inset 10px 10px 30px rgba(255,255,255,0.5),0 0 30px rgba(56,189,248,0.5);">
+              <!-- 回転カプセル群 -->
+              <div id="capsule-spinner" style="width:100%;height:100%;position:absolute;animation:gachaSpin 4s linear infinite;transform-origin:center center;">
+                <div class="gcball" style="background:linear-gradient(135deg,#fca5a5,#dc2626);top:9%;left:3%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#93c5fd,#2563eb);top:6%;left:24%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#86efac,#16a34a);top:11%;left:46%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#fde68a,#d97706);top:7%;left:67%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#d8b4fe,#9333ea);top:5%;left:83%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#6ee7b7,#059669);top:38%;left:2%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#fdba74,#ea580c);top:41%;left:22%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#f9a8d4,#db2777);top:36%;left:43%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#a5f3fc,#0891b2);top:40%;left:63%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#fca5a5,#b91c1c);top:37%;left:81%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#c4b5fd,#6d28d9);top:65%;left:8%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#fde047,#ca8a04);top:68%;left:28%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#6ee7b7,#047857);top:63%;left:51%;"></div>
+                <div class="gcball" style="background:linear-gradient(135deg,#93c5fd,#1d4ed8);top:70%;left:71%;"></div>
+              </div>
+              <!-- ガラス反射 -->
+              <div style="position:absolute;inset:0;background:linear-gradient(145deg,rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.1) 35%,transparent 65%);border-radius:117px 117px 0 0;pointer-events:none;"></div>
+              <!-- 内部グロー -->
+              <div style="position:absolute;inset:0;border-radius:117px 117px 0 0;animation:domeGlow 1.8s ease-in-out infinite;pointer-events:none;"></div>
+            </div>
+            <!-- 接続リング -->
+            <div style="position:absolute;bottom:0;left:-6px;right:-6px;height:20px;background:linear-gradient(to bottom,#0369a1,#075985);border:4px solid #0c4a6e;border-top:none;"></div>
+          </div>
+          <!-- マシンボディ -->
+          <div style="background:linear-gradient(160deg,#38bdf8 0%,#0284c7 45%,#0369a1 100%);border:5px solid #0c4a6e;border-top:none;border-radius:0 0 28px 28px;padding:14px 16px 18px;box-shadow:0 10px 40px rgba(0,0,0,0.6),inset 0 2px 0 rgba(255,255,255,0.25);position:relative;">
+            <!-- LCDスクリーン -->
+            <div style="background:#0a0f1e;border:3px solid #1e3a5f;border-radius:10px;padding:10px 14px;margin-bottom:13px;min-height:52px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 2px 10px rgba(0,0,0,0.9),0 0 10px rgba(74,222,128,0.1);">
+              <div id="gacha-lcd" style="color:#4ade80;font-family:'Courier New',monospace;font-size:13px;font-weight:bold;text-shadow:0 0 10px rgba(74,222,128,0.8);text-align:center;letter-spacing:1px;animation:lcdPulse 3s ease-in-out infinite;">▶ READY TO GACHA ◀</div>
+            </div>
+            <!-- コイン + ダイヤル -->
+            <div style="display:flex;align-items:center;justify-content:space-around;margin-bottom:13px;gap:8px;">
+              <!-- コイン投入口 -->
+              <div style="background:linear-gradient(to bottom,#1e40af,#1e3a8a);border:3px solid #1e3a8a;border-radius:12px;padding:10px;width:86px;text-align:center;box-shadow:inset 0 2px 6px rgba(0,0,0,0.5);">
+                <div id="coin-display" style="font-size:28px;line-height:1;">💰</div>
+                <div style="height:5px;background:#020617;border-radius:3px;margin-top:8px;border:1px solid #1e3a8a;"></div>
+                <div style="font-size:9px;color:#93c5fd;margin-top:4px;font-weight:bold;letter-spacing:2px;">COIN</div>
+              </div>
+              <div style="color:rgba(255,255,255,0.45);font-size:16px;">→</div>
+              <!-- ダイヤル -->
+              <div style="position:relative;text-align:center;">
+                <div id="dial-arrow" style="font-size:15px;display:block;margin-bottom:3px;color:#fbbf24;animation:arrowBounce 0.45s ease-in-out infinite alternate;">⬇</div>
+                <div id="gacha-dial" style="width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at 38% 33%,#fef9c3,#fbbf24 50%,#b45309);border:5px solid #78350f;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#431407;letter-spacing:2px;box-shadow:0 6px 20px rgba(0,0,0,0.5),inset 0 3px 8px rgba(255,255,255,0.5),inset 0 -3px 8px rgba(0,0,0,0.3);position:relative;overflow:hidden;cursor:pointer;">
+                  <div style="position:absolute;width:5px;height:30px;background:#78350f;border-radius:3px;top:5px;opacity:0.4;"></div>
+                  <span style="position:relative;z-index:1;">TURN</span>
+                </div>
+              </div>
+            </div>
+            <!-- アウトプットトレイ -->
+            <div style="background:#020617;border:3px solid #1e3a8a;border-radius:14px;min-height:70px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;box-shadow:inset 0 3px 12px rgba(0,0,0,0.8);">
+              <div id="output-idle" style="color:rgba(255,255,255,0.2);font-size:11px;font-family:monospace;letter-spacing:3px;">▼ 出口 ▼</div>
+              <div id="capsule-result" style="display:none;font-size:52px;position:absolute;animation:capsuleReveal 0.9s cubic-bezier(0.175,0.885,0.32,1.275) forwards;">🎁</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
