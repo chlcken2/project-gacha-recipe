@@ -48,7 +48,7 @@
 
   toggleBtn.addEventListener('click', function() {
     showPassword = !showPassword;
-    toggleBtn.textContent = showPassword ? '숨기기' : '보기';
+    toggleBtn.textContent = showPassword ? '非表示' : '表示';
     renderPassword();
   });
 

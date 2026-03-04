@@ -12,7 +12,7 @@
 
   function updateLikeButton() {
     likeCountEl.textContent = likeCount;
-    if (likeBtnText) likeBtnText.textContent = isLiked ? '좋아요 취소' : '좋아요';
+    if (likeBtnText) likeBtnText.textContent = isLiked ? 'いいね取消' : 'いいね';
     likeBtn.className = 'py-3 rounded-lg flex items-center justify-center gap-2 transition-colors ' + (isLiked ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200');
     if (likeBtnIcon) {
       likeBtnIcon.setAttribute('fill', isLiked ? 'currentColor' : 'none');
@@ -32,7 +32,7 @@
     if (!text) return;
     var div = document.createElement('div');
     div.className = 'bg-gray-50 p-4 rounded-lg';
-    div.innerHTML = '<div class="flex items-center justify-between mb-2"><span class="font-medium text-amber-700">나</span><span class="text-sm text-gray-500">방금 전</span></div><p class="text-gray-700">' + text.replace(/</g, '&lt;') + '</p>';
+    div.innerHTML = '<div class="flex items-center justify-between mb-2"><span class="font-medium text-amber-700">私</span><span class="text-sm text-gray-500">たった今</span></div><p class="text-gray-700">' + text.replace(/</g, '&lt;') + '</p>';
     commentList.insertBefore(div, commentList.firstChild);
     commentCount.textContent = parseInt(commentCount.textContent, 10) + 1;
     newCommentInput.value = '';
