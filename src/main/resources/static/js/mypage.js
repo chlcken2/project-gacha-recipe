@@ -4,8 +4,7 @@
 
   var tabContentMap = {
     recipes: { grid: 'view-grid', list: 'view-list' },
-    liked: { grid: 'view-liked-grid', list: 'view-liked-list' },
-    collection: { grid: 'view-collection-grid', list: 'view-collection-list' }
+    liked: { grid: 'view-liked-grid', list: 'view-liked-list' }
   };
 
   function showTab(tab) {

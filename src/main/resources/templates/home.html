@@ -151,17 +151,14 @@
       <!-- タブナビゲーション -->
       <div class="bg-white rounded-t-2xl shadow-lg">
         <div class="flex border-b border-gray-200">
-          <button type="button" data-tab="all" class="tab-btn flex-1 flex items-center justify-center gap-2 py-4 transition-colors tab-active">
+          <button type="button" class="flex-1 flex items-center justify-center gap-2 py-4 transition-colors text-gray-600">
             🌐 みんなの食卓を見る
-          </button>
-          <button type="button" data-tab="my" class="tab-btn flex-1 flex items-center justify-center gap-2 py-4 transition-colors tab-inactive">
-            🍳 私の冷蔵庫
           </button>
         </div>
 
         <div class="p-6">
           <!-- レシピグリッド - 全体 -->
-          <div id="tab-all" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 tab-content">
+          <div id="tab-all" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <a th:href="@{/recipe/detail/1}" href="/recipe/detail/1" class="recipe-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow text-left block border border-gray-100">
               <div class="aspect-video bg-gray-200 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1600688654899-379ec76aca42?w=400" alt="簡単キムチチャーハン" class="w-full h-full object-cover"/>
@@ -244,58 +241,7 @@
             </a>
           </div>
 
-          <!-- レシピグリッド - 私の冷蔵庫 -->
-          <div id="tab-my" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 tab-content hidden">
-            <a th:href="@{/recipe/detail/1}" href="/recipe/detail/1" class="recipe-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow text-left block border border-gray-100">
-              <div class="aspect-video bg-gray-200 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1600688654899-379ec76aca42?w=400" alt="簡単キムチチャーハン" class="w-full h-full object-cover"/>
-              </div>
-              <div class="p-4">
-                <h3 class="font-medium mb-2">簡単キムチチャーハン</h3>
-                <p class="text-sm text-gray-600 line-clamp-2 mb-3">冷蔵庫のキムチで5分で完成する満腹の一食！</p>
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded">🔪 低</span>
-                  <span class="text-xs text-gray-500">⏱ 10分</span>
-                </div>
-                <div class="flex items-center justify-between text-sm text-gray-500">
-                  <span>❤ 245</span><span>💬 32</span><span>👀 1203</span>
-                </div>
-              </div>
-            </a>
-            <a th:href="@{/recipe/detail/3}" href="/recipe/detail/3" class="recipe-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow text-left block border border-gray-100">
-              <div class="aspect-video bg-gray-200 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1653697469316-955d5ebe5994?w=400" alt="激辛ラーメン炒め" class="w-full h-full object-cover"/>
-              </div>
-              <div class="p-4">
-                <h3 class="font-medium mb-2">激辛ラーメン炒め</h3>
-                <p class="text-sm text-gray-600 line-clamp-2 mb-3">ラーメンをスープなしで炒めてさらに美味しく！</p>
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded">🔪 低</span>
-                  <span class="text-xs text-gray-500">⏱ 15分</span>
-                </div>
-                <div class="flex items-center justify-between text-sm text-gray-500">
-                  <span>❤ 312</span><span>💬 45</span><span>👀 1567</span>
-                </div>
-              </div>
-            </a>
-            <a th:href="@{/recipe/detail/5}" href="/recipe/detail/5" class="recipe-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow text-left block border border-gray-100">
-              <div class="aspect-video bg-gray-200 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1573470571028-a0ca7a723959?w=400" alt="テンジャンチゲ" class="w-full h-full object-cover"/>
-              </div>
-              <div class="p-4">
-                <h3 class="font-medium mb-2">テンジャンチゲ</h3>
-                <p class="text-sm text-gray-600 line-clamp-2 mb-3">香ばしいテンジャンに豆腐と野菜を入れた温かいスープ料理。</p>
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded">🔪 低</span>
-                  <span class="text-xs text-gray-500">⏱ 15分</span>
-                </div>
-                <div class="flex items-center justify-between text-sm text-gray-500">
-                  <span>❤ 156</span><span>💬 19</span><span>👀 734</span>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
+                  </div>
       </div>
     </div>
 
