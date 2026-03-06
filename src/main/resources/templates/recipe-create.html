@@ -219,12 +219,12 @@
               <span>🌍 なんでも <span class="text-xs text-gray-400">(何でもOK！)</span></span>
             </label>
             <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-blue-50 transition-colors">
-              <input type="radio" name="cuisine" value="한식" class="accent-blue-600"/>
-              <span>🇰🇷 韓国料理</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-blue-50 transition-colors">
               <input type="radio" name="cuisine" value="일식" class="accent-blue-600"/>
               <span>🇯🇵 日本料理</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-blue-50 transition-colors">
+              <input type="radio" name="cuisine" value="한식" class="accent-blue-600"/>
+              <span>🇰🇷 韓国料理</span>
             </label>
             <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-blue-50 transition-colors">
               <input type="radio" name="cuisine" value="중식" class="accent-blue-600"/>
@@ -232,7 +232,7 @@
             </label>
             <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-blue-50 transition-colors">
               <input type="radio" name="cuisine" value="양식" class="accent-blue-600"/>
-              <span>🇮🇹 洋食</span>
+              <span>🇺🇸 洋食</span>
             </label>
             <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-blue-50 transition-colors">
               <input type="radio" name="cuisine" value="동남아" class="accent-blue-600"/>
@@ -519,15 +519,15 @@
 
         <!-- Action Buttons -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+          <button type="button" id="btn-private" class="bg-white hover:bg-gray-50 border-2 border-purple-400 text-purple-700 py-3 rounded-lg font-medium shadow-md transition-colors flex items-center justify-center gap-2">
+            🔒 私だけの食卓登録
+          </button>
           <a id="btn-detail" href="#" class="bg-white hover:bg-gray-50 border-2 border-amber-400 text-amber-700 py-3 rounded-lg font-medium shadow-md transition-colors flex items-center justify-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
             詳細を見る
           </a>
-          <button type="button" id="btn-private" class="bg-white hover:bg-gray-50 border-2 border-purple-400 text-purple-700 py-3 rounded-lg font-medium shadow-md transition-colors flex items-center justify-center gap-2">
-            🔒 私だけの食卓
-          </button>
           <button type="button" id="btn-public" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 rounded-lg font-medium shadow-md text-center transition-colors flex items-center justify-center gap-2">
-            🌍 みんなの食卓
+            🌍 みんなの食卓登録
           </button>
         </div>
       </div>
