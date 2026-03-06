@@ -24,7 +24,8 @@ import java.util.UUID;
 @Component
 public class ImageGenerationClient {
 
-    private static final String GEMINI_IMAGE_MODEL = "gemini-2.0-flash-exp-image-generation";
+    @Value("${gemini.api.image.model}")
+    private String GEMINI_IMAGE_MODEL;
     private static final String GEMINI_API_URL =
             "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s";
 
@@ -58,7 +59,7 @@ public class ImageGenerationClient {
 
     private String generateGeminiImageUrl(String title, String cuisineStyle) throws Exception {
         String prompt = "Professional food photography of " + title
-                + ", " + cuisineStyle + " cuisine style, close-up shot, white ceramic plate,"
+                + " close-up shot, white ceramic plate,"
                 + " restaurant quality, soft studio lighting, appetizing, no text";
 
         // Build request body

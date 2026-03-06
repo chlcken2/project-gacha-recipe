@@ -18,7 +18,7 @@ public class GeminiClient {
     @Value("${gemini.api.key}")
     private String apiKey;
 
-    @Value("${gemini.api.model}")
+    @Value("${gemini.api.text.model}")
     private String model;
 
     public GeminiClient(RestTemplate restTemplate, ObjectMapper objectMapper) {
